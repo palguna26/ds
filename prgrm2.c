@@ -59,7 +59,7 @@ int main() {
         printf("1. Read time\n");
         printf("2. Display time\n");
         printf("3. Update time\n");
-        printf("4. Add two time variables\n");
+        printf("4. Add\n");
         printf("5. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
