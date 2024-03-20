@@ -32,7 +32,7 @@ void displayStudents(struct Student *students, int N) {
     for (int i = 0; i < N; i++) {
         printf("Student %d:\n", i + 1);
         printf("Name: %s\n", students[i].Name);
-        printf("Registration Number: %d\n", students[i].Reg_no);
+        printf("Roll Number: %d\n", students[i].Reg_no);
         printf("Test Marks: %.2f, %.2f, %.2f\n", students[i].marks[0], students[i].marks[1], students[i].marks[2]);
         printf("Average Marks: %.2f\n", students[i].average_marks);
         printf("\n");
@@ -77,9 +77,9 @@ int main() {
     do {
         // Display menu
         printf("\nMenu:\n");
-        printf("1. Read student information\n");
-        printf("2. Display student information\n");
-        printf("3. Calculate average of best two test marks\n");
+        printf("1. Read\n");
+        printf("2. Display\n");
+        printf("3. Compute average\n");
         printf("4. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
