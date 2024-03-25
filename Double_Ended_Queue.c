@@ -1,164 +1,188 @@
-#include <stdio.h>
-#include <stdlib.h>
+/Double ended queue with dynamic memory allocation/
+
+#include<stdio.h>
+#include<stdlib.h>
 int size;
+
 struct Queue
 {
-    int *queue;//Base address of array to store Queue
-    int front; //Index Of front element in Queue
-    int rear; //Index of rear element in Queue
-}Q;
-//Function to insert an element to rear of Queue
-void pushrear(int val)
-{
-    //Checking if Queue is Full
-    if(Q.rear==size-1&&Q.front==0||Q.front>Q.rear)
-    {
-        printf("Queue is Full\n");
-        printf("Reallocating Memory\n");
-        size++;
-        Q.queue = (int *)realloc(Q.queue,size*sizeof(int));
-    }
-    if(Q.front==-1)
-       Q.front=Q.rear=0;
-    if(Q.rear==size-1)
-    {
-        Q.rear = 0;
-    }
-    else
-    {
-        Q.rear++;   
-    }
-    *(Q.queue+Q.rear) = val;
-    printf("Insertion Succesfull\n");
-}
-//Function to insert an element to front of Queue
-void pushfront(int val)
-{
-    //Checking if Queue is Full
-    if(Q.rear==size-1&&Q.front==0||Q.front>Q.rear)
-    {
-        printf("Queue is Full\n");
-        printf("Reallocating Memory\n");
-        size++;
-        Q.queue = (int *)realloc(Q.queue,size*sizeof(int));
-    }
-    if(Q.front==-1)
-    {
-        Q.front=Q.rear=0;
-    }
-    else if(Q.front==0)
-    {
-        Q.front = size-1;
-    }
-    else
-    {
-        Q.front--;
-    }
-    *(Q.queue+Q.front)=val;
-    printf("Insertion Succesfull\n");
-}
-//Function to delete the front element of Queue
-void popfront()
-{
-    if(Q.front==-1)
-    {
-        printf("Queue is Empty");
-    }
-    else
-    {
-        //Deleting Element from front
-        printf("Deleted Element : %d\n",*(Q.queue+Q.front));
-    }
-    if(Q.front==Q.rear)
-    {
-        Q.front=Q.rear=-1;
-    }
-    else if (Q.front==size-1)
-    {
-        Q.front=0;
-    }
-    else
-    {
-        Q.front++;
-    }
-}
-//Function to delete the rear element of Queue
-void poprear()
-{
-if(Q.front==-1)
-    {
-        printf("Queue is Empty");
-    }
-    else
-    {
-        //Deleting Element from rear
-        printf("Deleted Element : %d\n",*(Q.queue+Q.rear));
-    }
-    if(Q.front==Q.rear)
-        Q.front=Q.rear=-1;
-    
-else if(Q.rear == 0)
-        Q.rear = size-1;
-    else
-        Q.rear--;
-}
-//Function Display all elements of Queue
-void display()
-{
-    int i,fpos=Q.front,rpos=Q.rear;
-    //Checking if Queue is Empty
-    if(Q.front==-1)
-    {
-        printf("Queue is Empty");
-    }
-    if (fpos<=rpos)
-    {
-        for(i=fpos;i<=rpos;i++)
-        printf("%d ",*(Q.queue+i));
-    }
-    
-    else
-    {
-        for(i=fpos;i<=size-1;i++)
-        printf("%d ",*(Q.queue+i));
-        fpos=0;
-        for(i=fpos;i<=rpos;i++)
-        printf("%d ",*(Q.queue+i));
-    }
-    printf("\n");
-}
+    int *items;
+    int Front, Rear;
+};
+typedef struct Queue QUE;
+
+void InsertRear(QUE *);
+void DeleteFront(QUE *);
+void InsertFront(QUE *);
+void DeleteRear(QUE *);
+void Display(QUE *);
+void QFront(QUE *);
+void QRear(QUE *);
+
 void main()
 {
-    Q.front=Q.rear=-1; //Initializing Empty Queue
-    int val,choice;
-    printf("Enter the Size : ");
+    QUE Q;
+    int choice;
+    Q.Front = 0;
+    Q.Rear = -1;
+    
+    printf("Enter the size of the queue: ");
     scanf("%d",&size);
-    Q.queue=(int *)malloc(size*sizeof(int)); //Dynamically Allocating Array for Queue
-    printf("Main Menu\n1.Push-Front\n2.Pop-Front\n3.Push-Rear\n4.Pop-Rear\n5.Display\n6.Exit\n");
+    Q.items = (int *)malloc(size*sizeof(int));
+    
     for(;;)
     {
-        printf("Enter Your choice : ");
-        scanf("%d",&choice);
+        printf("\nEnter your choice:\n1:Insert by rear\n2:Delete by front\n3:Display\n4:Insert by front\n5:Delete by rear\n6:Display first item of the queue\n7:Display last item of the queue\n");
+        scanf("%d", &choice);
+        
         switch(choice)
         {
-            case 1 : printf("Enter the element to be inserted : ");
-                     scanf("%d",&val);
-                     pushfront(val);
-                     break;
-            case 2 : popfront();
-                     break;
-            case 3 : printf("Enter the element to be inserted : ");
-                     scanf("%d",&val);
-                     pushrear(val);
-                     break;
-            case 4 : poprear();
-                     break;
-            case 5 : printf("Queue : ");
-                     display();
-                     break;
-            case 6 : printf("!! THANK YOU !!\n");
-                     exit(0);
-            default : printf("Invalid Choice\nEnter Again\n");
+            case 1: InsertRear(&Q); Display(&Q); break;
+            case 2: DeleteFront(&Q); Display(&Q); break;
+            case 3: Display(&Q); break;
+            case 4: InsertFront(&Q); Display(&Q); break;
+            case 5: DeleteRear(&Q); Display(&Q); break;
+            case 6: QFront(&Q); break;
+            case 7: QRear(&Q); break;
+            default: exit(0);
         }
     }
+}
+
+void InsertRear(QUE *PQ)
+{
+    int item, choice;
+    if(PQ->Rear == size-1)
+    {
+        if(PQ->Front != 0)
+        {
+            printf("Front insertion is possible\n");
+            return;
+        }
+        else
+        {
+            printf("Queue overflow!! Insertion is not possible!! Do you want to go for reallocation??\n");
+            printf("Enter your choice:\n1:Yes\n2:No\n");
+            scanf("%d",&choice);
+            if(choice == 1)
+            {
+                size = size*2;
+                PQ->items = (int *)realloc(PQ->items,size*sizeof(int));
+            }
+            else
+            {
+                printf("No more insertion is possible!!\n");
+                return;
+            }
+            
+        }
+    }
+    printf("Enter the item to be inserted: ");
+    scanf("%d", &item);
+    PQ->Rear++;
+    *(PQ->items + PQ->Rear) = item;
+    
+}
+
+void DeleteFront(QUE *PQ)
+{
+    if(PQ->Front > PQ->Rear)
+    {
+        printf("Queue underflow!! Deletion is not possible!!\n");
+        return;
+    }
+    printf("Deleted element is %d\n",*(PQ->items + PQ->Front));
+    PQ->Front++;
+    if(PQ->Front > PQ->Rear)
+    {
+        PQ->Front = 0;
+        PQ->Rear = -1;
+    }
+}
+
+void Display(QUE *PQ)
+{
+    int i;
+    if(PQ->Front > PQ->Rear)
+    {
+        printf("Queue is empty!!\n");
+        return;
+    }
+    printf("The entered queue is :\n");
+    for(i=PQ->Front; i<=PQ->Rear; i++)
+        printf("%d\t",*(PQ->items + i));
+    printf("\n");
+}
+
+void InsertFront(QUE *PQ)
+{
+    int item, choice;
+    if(PQ->Front == 0 && PQ->Rear == -1)
+    {
+        printf("Enter the item to be inserted: ");
+        scanf("%d", &item);
+        *(PQ->items + ++PQ->Rear) = item;
+        return;
+    }
+    if(PQ->Front != 0)
+    {
+        printf("Enter the item to be inserted: ");
+        scanf("%d", &item);
+        *(PQ->items + --PQ->Front) = item;
+        return;
+    }
+    if(PQ->Rear == size-1 && PQ->Front == 0)
+    {
+        printf("No more insertion is possible!! Do you want to go for reallocation??\n");
+        printf("Enter your choice:\n1:Yes\n2:No\n");
+        scanf("%d",&choice);
+        if(choice == 1)
+        {
+            size = size*2;
+            PQ->items = (int *)realloc(PQ->items,size*sizeof(int));
+        }
+        else
+        {
+            printf("No more insertion is possible!!\n");
+            return;
+        }
+    }
+    if(PQ->Rear != size-1)
+        printf("Rear insertion is possible\n");
+}
+
+void DeleteRear(QUE *PQ)
+{
+    if(PQ->Front > PQ->Rear)
+    {
+        printf("Queue is empty!!\n");
+        return;
+    }
+    printf("Deleted item is %d\n",*(PQ->items + PQ->Rear));
+    PQ->Rear--;
+    if(PQ->Front > PQ->Rear)
+    {
+        PQ->Front = 0;
+        PQ->Rear = -1;
+    }
+}
+
+void QFront(QUE *PQ)
+{
+    if(PQ->Front > PQ->Rear)
+    {
+        printf("Queue is empty!!\n");
+        return;
+    }
+    printf("Front most item of the queue is : %d\n",*(PQ->items + PQ->Front));
+}
+
+void QRear(QUE *PQ)
+{
+    if(PQ->Front >  PQ->Rear)
+    {
+        printf("Queue is empty!!\n");
+         return;
+    }
+    printf("Last element of the queue is %d\n", *(PQ->items + PQ->Rear));
 }
