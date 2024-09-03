@@ -1,192 +1,178 @@
 #include<stdio.h>
 #include<stdlib.h>
+
 struct node
 {
-int info;
-struct node * link;
+    int info;
+    struct node *link;
 };
-typedef struct node* NODE;
 
-int N=0;
-NODE createnode();
+typedef struct node *NODE;
+
+NODE createNode();
+void InsertFront(NODE);
 void Display(NODE);
-NODE insertrear(NODE);
-NODE insertfront(NODE);
-NODE deletefront(NODE);
-NODE deleterear(NODE);
-NODE insertbypos(NODE);
-NODE deletebypos(NODE);
-NODE deletebykey(NODE);
-NODE insertbyorder(NODE);
-NODE sort(NODE);
-NODE search(NODE);
-NODE reverse(NODE);
-NODE cop(NODE);
+void SearchByKey(NODE);
+void InsertByOrder(NODE);
+void DeleteByPosition(NODE);
+void DeleteByKey(NODE);
 void main()
-{ 
-  NODE First=NULL;
-  NODE SN,copy,rev;
-  int choice;
-  system ("clear");
-for(;;)
 {
-  printf("Enter choice\n 1.insertfront\n 2.Display\n 3.search by key\n 4.insertbyorder\n 5.deletebykey\n 6.delete by position\n ");
-  scanf("%d",&choice);
-  switch(choice)
-  {
-    case 1:First=insertfront(First);Display(First);break;
-    case 2:Display(First);break;
-    case 3:SN =search(First);
-            if(SN==NULL)
-            printf("Not present\n");
-            else
-            printf("Node info is  %d\n",SN->info);
-            break;
+    NODE Header,CopyHeader;
+    int choice;
+    Header = (NODE)malloc(sizeof(struct node));
+    Header->info = 0;
+    Header->link = Header;
+    CopyHeader = (NODE)malloc(sizeof(struct node));
+    CopyHeader->info = 0;
+    CopyHeader->link = CopyHeader;
     
-    case 4:First=insertbyorder(First);Display(First);break;
-    case 5:First=deletebykey(First);Display(First);break;
-    case 6:First=deletebypos(First);Display(First);break;
-    default:exit(0);
-  }
-}
+    for(;;)
+    {
+        printf("\nEnter your choice:\n1:Insert by front\n2:Display\n3:Search by key\n4:Insert by order\n5:Delete by position\n6:Delete by key\n");
+        scanf("%d",&choice);
+        
+        switch(choice)
+        {
+            case 1: InsertFront(Header); Display(Header); break;
+            case 2: Display(Header); break;
+            case 3: SearchByKey(Header); break;
+            case 4: InsertByOrder(Header); Display(Header); break;
+            case 5: DeleteByPosition(Header); Display(Header); break;
+            case 6: DeleteByKey(Header); Display(Header); break;
+            default: exit(0);
+        }
+    }
 }
 
-NODE insertfront(NODE pf)
+NODE createNode()
 {
-	NODE NN;
-	NN=createnode();
-	printf("Enter the data\n");
-	scanf("%d",&NN->info);
-	NN->link=pf;
-	pf=NN;
-	N++;
-	return pf;
+    NODE NN = (NODE)malloc(sizeof(struct node));
+    printf("Enter the data: ");
+    scanf("%d",&NN->info);
+    NN->link = NN;
+    return NN;
 }
 
-void Display(NODE pf)
-{       
-	if(pf==NULL)
-	{
-	printf("Empty");
-	return;
-	}
-        printf("DATA is\n");
-	while(pf!=NULL)
-	{
-	printf("%d\n",pf->info);
-	pf=pf->link;
-	}
-}
-
-NODE createnode()
+void InsertFront(NODE H)
 {
-	NODE NN;
-	NN=(NODE)malloc(sizeof(struct node));
-	return NN;
+    NODE NN = createNode();
+    NN->link = H->link;
+    H->link = NN;
+    H->info ++;
 }
 
-
-
-
-
-
-NODE search(NODE pf)
+void Display(NODE H)
 {
-	int key;
-	printf("Enter key");
-	scanf("%d",&key);
-	while(pf!=NULL)
-	{
-	if(pf->info=key)
-	{return pf;
-	}
-	pf=pf->link;
-	}
-	return NULL;
+    NODE TP;
+    if(H->info == 0)
+    {
+        printf("List is empty!!\n");
+        return;
+    }
+    TP = H->link;
+    printf("Entered elements are: \n");
+    while(TP != H)
+    {
+        printf("%d\t",TP->info);
+        TP = TP->link;
+    }
 }
 
 
-NODE insertbyorder(NODE pF)
+
+void SearchByKey(NODE H)
 {
- 	NODE NN,TP,PN;
-	NN=createnode();
-        printf("Enter the data\n");
-	scanf("%d",&NN->info);
-	NN->link=NULL;
-	TP=pF; PN=NULL;
-	while(TP!=NULL && TP->info<NN->info)
-	  {
-	   PN=TP;
-	   TP=TP->link;
-	  }
-	if(PN==NULL)
-	  {
-	   NN->link=TP;
-           return NN;
-	  }
-	NN->link=TP;
-	PN->link=NN;
-	N++;
-	return pF;
+    int key;
+    NODE TP;
+    if(H->info == 0)
+    {
+        printf("List is empty!!\n");
+        return;
+    }
+    printf("Enter the key element: ");
+    scanf("%d",&key);
+    TP = H->link;
+    while(TP != H)
+    {
+        if(TP->info == key)
+        {
+            printf("key element %d is found\n",TP->info);
+            return;
+        }
+        TP = TP->link;
+    }
+    printf("Key element does not exist!!\n");
 }
 
-NODE deletebykey(NODE pf)
+
+void InsertByOrder(NODE H)
 {
-	NODE ND,PN;
-	int key;	
-	if(pf==NULL)
-	{
-	printf("Empty");
-	return NULL;
-	}
-	printf("Enter key");
-	scanf("%d",&key);
-	ND=pf;
-	PN=NULL;
-	while(ND!=NULL&&ND->info!=key)
-	{PN=ND;
-	ND=ND->link;
-	}
-	if(ND==NULL)
-	printf("Not found");
-	else if(PN==NULL)
-	pf=pf->link;
-	else 
-	PN->link=ND->link;
-	printf("Deleted item is %d",ND->info);
-	N--;
-	free(ND);
-	return pf;
+    NODE NN = createNode();
+    NODE TP,PN;
+    TP = H->link;
+    PN = H;
+    while(TP != H && TP->info < NN->info)
+    {
+        PN = TP;
+        TP = TP->link;
+    }
+    NN->link = TP;
+    PN->link = NN;
+    H->info++;
 }
 
-
-NODE deletebypos(NODE pf)
+void DeleteByPosition(NODE H)
 {
-	NODE ND,PN;
-	int pos,cnt;
-	if(pf==NULL)
-	{
-	printf("Empty");
-	return NULL;
-	}
-	L1:printf("Enter position between 1 to %d",N);
-	scanf("%d",&pos);
-	if(pos<1||pos>N) goto L1;
-	ND=pf;
-	PN=NULL;
-	cnt=1;
-	while(cnt!=pos)
-	{PN=ND;
-	ND=ND->link;
-	cnt++;
-	}
-	if(PN==NULL)
-	pf=pf->link;
-	else 
-	PN->link=ND->link;
-	printf("Deleted item is %d",ND->info);
-	N--;
-	free(ND);
-	return pf;
+    NODE TP,ND;
+    int pos,count = 0;
+    if(H->info == 0)
+    {
+        printf("List is empty!!\n");
+        return;
+    }
+    do{
+        printf("Enter a valid position between 1 and %d: ",H->info);
+        scanf("%d",&pos);
+    }while(pos<1 || pos>H->info);
+    TP = H;
+    while(count < pos-1)
+    {
+        TP = TP->link;
+        count++;
+    }
+    ND = TP->link;
+    TP->link = ND->link;
+    printf("Deleted element is %d\n",ND->info);
+    free(ND);
+    H->info--;
 }
 
+void DeleteByKey(NODE H)
+{
+    int key;
+    NODE TP,PN;
+    if(H->info == 0)
+    {
+        printf("List is empty!!\n");
+        return;
+    }
+    printf("Enter the key element: ");
+    scanf("%d",&key);
+    TP = H->link;
+    PN = H;
+    while(TP != H)
+    {
+        if(TP->info == key)
+        {
+           PN->link = TP->link;
+           printf("Deleted element is %d\n",TP->info);
+           free(TP);
+           H->info--;
+           return;
+        }
+        PN = TP;
+        TP = TP->link;
+    }
+    printf("Key element does not exist!!\n");
+}
