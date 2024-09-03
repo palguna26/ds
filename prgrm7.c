@@ -22,14 +22,10 @@ void DeleteByPosition(NODE);
 void main()
 {
     NODE Header = (NODE)malloc(sizeof(struct node));
-    NODE CopyHeader = (NODE)malloc(sizeof(struct node));
     NODE NS;
     int choice;
     Header->info = 0;
     Header->LL = Header->RL = Header;
-    CopyHeader->info = 0;
-    CopyHeader->RL = CopyHeader->LL = CopyHeader;
-    
     for(;;)
     {
         printf("\nEnter your choice:\n1:Insert by front\n2:Display\n3:Insert by rear\n4:Search by key\n5:Delete by position\n");
