@@ -20,7 +20,7 @@ void DeleteRear(NODE);
 NODE SearchByPosition(NODE);
 
 void InsertByOrder(NODE);
-v
+
 
 void main()
 {
