@@ -25,13 +25,10 @@ v
 void main()
 {
     NODE Header = (NODE)malloc(sizeof(struct node));
-    NODE CopyHeader = (NODE)malloc(sizeof(struct node));
     NODE NS;
     int choice;
     Header->info = 0;
     Header->LL = Header->RL = Header;
-    CopyHeader->info = 0;
-    CopyHeader->RL = CopyHeader->LL = CopyHeader;
     
     for(;;)
     {
