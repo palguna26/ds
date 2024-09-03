@@ -18,15 +18,11 @@ void DeleteByPosition(NODE);
 void DeleteByKey(NODE);
 void main()
 {
-    NODE Header,CopyHeader;
+    NODE Header;
     int choice;
     Header = (NODE)malloc(sizeof(struct node));
     Header->info = 0;
     Header->link = Header;
-    CopyHeader = (NODE)malloc(sizeof(struct node));
-    CopyHeader->info = 0;
-    CopyHeader->link = CopyHeader;
-    
     for(;;)
     {
         printf("\nEnter your choice:\n1:Insert by front\n2:Display\n3:Search by key\n4:Insert by order\n5:Delete by position\n6:Delete by key\n");
